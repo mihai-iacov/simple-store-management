@@ -1,5 +1,6 @@
 package com.store.management;
 
+import com.store.management.model.CreateProductDto;
 import com.store.management.model.Product;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,12 @@ public class TestConstants {
             .updatedAt(LocalDateTime.now())
             .build();
 
+    public static final CreateProductDto CREATE_PRODUCT_DTO = CreateProductDto.builder()
+            .name("CreateProductDto")
+            .description("CreateDescription")
+            .price(25.0)
+            .stock(100)
+            .build();
     public static final Product UPDATED_PRODUCT = Product.builder()
             .id(PRODUCT_ID_1)
             .name("UpdatedProduct")

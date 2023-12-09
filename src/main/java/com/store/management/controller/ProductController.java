@@ -1,6 +1,7 @@
 
 package com.store.management.controller;
 
+import com.store.management.model.CreateProductDto;
 import com.store.management.model.Product;
 import com.store.management.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Mono<Product> createProduct(@RequestBody Product product) {
+    public Mono<Product> createProduct(@RequestBody CreateProductDto product) {
         return productService.createProduct(product);
     }
 

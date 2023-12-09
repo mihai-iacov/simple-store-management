@@ -2,6 +2,7 @@ package com.store.management.service;
 
 
 import com.store.management.TestConstants;
+import com.store.management.model.Product;
 import com.store.management.model.ProductNotFoundException;
 import com.store.management.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static com.store.management.TestConstants.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -25,18 +28,18 @@ class ProductServiceTest {
 
     @Test
     void testGetAllProducts() {
-        when(productRepository.findAll()).thenReturn(Flux.fromIterable(TestConstants.MOCK_PRODUCTS));
+        when(productRepository.findAll()).thenReturn(Flux.fromIterable(MOCK_PRODUCTS));
 
         StepVerifier.create(productService.getAllProducts())
-                .expectNextSequence(TestConstants.MOCK_PRODUCTS)
+                .expectNextSequence(MOCK_PRODUCTS)
                 .verifyComplete();
     }
 
     @Test
     void testGetProductById() {
-        Long productId = TestConstants.PRODUCT_ID_1;
+        Long productId = PRODUCT_ID_1;
 
-        when(productRepository.findById(productId)).thenReturn(Mono.just(TestConstants.MOCK_PRODUCT_1));
+        when(productRepository.findById(productId)).thenReturn(Mono.just(MOCK_PRODUCT_1));
 
         StepVerifier.create(productService.getProductById(productId))
                 .expectNextMatches(product -> product.getId().equals(productId))
@@ -45,7 +48,7 @@ class ProductServiceTest {
 
     @Test
     void testGetProductById_ProductNotFound() {
-        Long productId = TestConstants.PRODUCT_ID_1;
+        Long productId = PRODUCT_ID_1;
 
         when(productRepository.findById(productId)).thenReturn(Mono.empty());
 
@@ -55,24 +58,34 @@ class ProductServiceTest {
     }
 
     @Test
+    void testCreateProduct() {
+        when(productRepository.save(any(Product.class))).thenReturn(Mono.just(MOCK_PRODUCT_1));
+
+        // Act & Assert
+        StepVerifier.create(productService.createProduct(CREATE_PRODUCT_DTO))
+                .expectNext(MOCK_PRODUCT_1)
+                .verifyComplete();
+    }
+
+    @Test
     void testUpdateProduct() {
-        Long productId = TestConstants.PRODUCT_ID_1;
+        Long productId = PRODUCT_ID_1;
 
-        when(productRepository.findById(productId)).thenReturn(Mono.just(TestConstants.MOCK_PRODUCT_1));
-        when(productRepository.save(TestConstants.MOCK_PRODUCT_1)).thenReturn(Mono.just(TestConstants.UPDATED_PRODUCT));
+        when(productRepository.findById(productId)).thenReturn(Mono.just(MOCK_PRODUCT_1));
+        when(productRepository.save(MOCK_PRODUCT_1)).thenReturn(Mono.just(UPDATED_PRODUCT));
 
-        StepVerifier.create(productService.updateProduct(productId, TestConstants.UPDATED_PRODUCT))
+        StepVerifier.create(productService.updateProduct(productId, UPDATED_PRODUCT))
                 .expectNextMatches(product -> product.getName().equals("UpdatedProduct"))
                 .verifyComplete();
     }
 
     @Test
     void testUpdateProduct_ProductNotFound() {
-        Long productId = TestConstants.PRODUCT_ID_1;
+        Long productId = PRODUCT_ID_1;
 
         when(productRepository.findById(productId)).thenReturn(Mono.empty());
 
-        StepVerifier.create(productService.updateProduct(productId, TestConstants.UPDATED_PRODUCT))
+        StepVerifier.create(productService.updateProduct(productId, UPDATED_PRODUCT))
                 .expectError(ProductNotFoundException.class)
                 .verify();
     }

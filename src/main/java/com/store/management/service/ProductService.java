@@ -1,5 +1,6 @@
 package com.store.management.service;
 
+import com.store.management.model.CreateProductDto;
 import com.store.management.model.Product;
 import com.store.management.model.ProductNotFoundException;
 import com.store.management.repository.ProductRepository;
@@ -32,10 +33,15 @@ public class ProductService {
                 .doOnError(error -> logger.warn("Product with ID {} not found.", id, error));
     }
 
-    public Mono<Product> createProduct(Product product) {
-        product.setId(null);
-        product.setCreatedAt(LocalDateTime.now());
-        product.setUpdatedAt(LocalDateTime.now());
+    public Mono<Product> createProduct(CreateProductDto createProductDto) {
+        Product product = Product.builder()
+                .name(createProductDto.name())
+                .description(createProductDto.description())
+                .price(createProductDto.price())
+                .stock(createProductDto.stock())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
         return productRepository.save(product)
                 .doOnSuccess(savedProduct -> logger.info("Created product: {}.", savedProduct));
     }
