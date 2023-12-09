@@ -1,9 +1,6 @@
 package com.store.management.service;
 
-import com.store.management.model.CreateProductDto;
-import com.store.management.model.Product;
-import com.store.management.model.ProductNotFoundException;
-import com.store.management.model.UpdateProductDto;
+import com.store.management.model.*;
 import com.store.management.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
