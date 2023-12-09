@@ -3,6 +3,7 @@ package com.store.management.service;
 import com.store.management.model.CreateProductDto;
 import com.store.management.model.Product;
 import com.store.management.model.ProductNotFoundException;
+import com.store.management.model.UpdateProductDto;
 import com.store.management.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,14 +47,14 @@ public class ProductService {
                 .doOnSuccess(savedProduct -> logger.info("Created product: {}.", savedProduct));
     }
 
-    public Mono<Product> updateProduct(Long id, Product updatedProduct) {
+    public Mono<Product> updateProduct(Long id, UpdateProductDto updateProductDto) {
         return productRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ProductNotFoundException(id)))
                 .flatMap(existingProduct -> {
-                    existingProduct.setName(updatedProduct.getName());
-                    existingProduct.setDescription(updatedProduct.getDescription());
-                    existingProduct.setPrice(updatedProduct.getPrice());
-                    existingProduct.setStock(updatedProduct.getStock());
+                    existingProduct.setName(updateProductDto.name());
+                    existingProduct.setDescription(updateProductDto.description());
+                    existingProduct.setPrice(updateProductDto.price());
+                    existingProduct.setStock(updateProductDto.stock());
                     existingProduct.setUpdatedAt(LocalDateTime.now());
                     return productRepository.save(existingProduct);
                 })

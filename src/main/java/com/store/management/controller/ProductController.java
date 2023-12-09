@@ -3,6 +3,7 @@ package com.store.management.controller;
 
 import com.store.management.model.CreateProductDto;
 import com.store.management.model.Product;
+import com.store.management.model.UpdateProductDto;
 import com.store.management.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -33,7 +34,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Mono<Product> updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
+    public Mono<Product> updateProduct(@PathVariable Long id, @RequestBody UpdateProductDto updatedProduct) {
         return productService.updateProduct(id, updatedProduct);
     }
 

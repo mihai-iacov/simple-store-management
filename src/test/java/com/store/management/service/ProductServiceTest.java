@@ -74,7 +74,7 @@ class ProductServiceTest {
         when(productRepository.findById(productId)).thenReturn(Mono.just(MOCK_PRODUCT_1));
         when(productRepository.save(MOCK_PRODUCT_1)).thenReturn(Mono.just(UPDATED_PRODUCT));
 
-        StepVerifier.create(productService.updateProduct(productId, UPDATED_PRODUCT))
+        StepVerifier.create(productService.updateProduct(productId, UPDATE_PRODUCT_DTO))
                 .expectNextMatches(product -> product.getName().equals("UpdatedProduct"))
                 .verifyComplete();
     }
@@ -85,7 +85,7 @@ class ProductServiceTest {
 
         when(productRepository.findById(productId)).thenReturn(Mono.empty());
 
-        StepVerifier.create(productService.updateProduct(productId, UPDATED_PRODUCT))
+        StepVerifier.create(productService.updateProduct(productId, UPDATE_PRODUCT_DTO))
                 .expectError(ProductNotFoundException.class)
                 .verify();
     }
