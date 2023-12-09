@@ -1,10 +1,7 @@
 
 package com.store.management.controller;
 
-import com.store.management.model.CreateProductDto;
-import com.store.management.model.Product;
-import com.store.management.model.UpdateProductPriceDto;
-import com.store.management.model.UpdateProductDto;
+import com.store.management.model.*;
 import com.store.management.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -44,6 +41,11 @@ public class ProductController {
     @PutMapping("/{productId}/updatePrice")
     public Mono<Product> updatePrice(@PathVariable UUID productId, @RequestBody UpdateProductPriceDto updateProductPriceDto) {
         return productService.updateProduct(productId, updateProductPriceDto.asPartialUpdateProductDto());
+    }
+
+    @PutMapping("/{productId}/updateStock")
+    public Mono<Product> updateStock(@PathVariable UUID productId, @RequestBody UpdateProductStockDto updateProductStockDto) {
+        return productService.updateProduct(productId, updateProductStockDto.asPartialUpdateProductDto());
     }
 
     @DeleteMapping("/{id}")
