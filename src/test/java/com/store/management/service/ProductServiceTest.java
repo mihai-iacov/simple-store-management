@@ -1,7 +1,6 @@
 package com.store.management.service;
 
 
-import com.store.management.TestConstants;
 import com.store.management.model.Product;
 import com.store.management.model.ProductNotFoundException;
 import com.store.management.repository.ProductRepository;
@@ -12,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.UUID;
 
 import static com.store.management.TestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,7 +38,7 @@ class ProductServiceTest {
 
     @Test
     void testGetProductById() {
-        Long productId = PRODUCT_ID_1;
+        UUID productId = PRODUCT_ID_1;
 
         when(productRepository.findById(productId)).thenReturn(Mono.just(MOCK_PRODUCT_1));
 
@@ -48,7 +49,7 @@ class ProductServiceTest {
 
     @Test
     void testGetProductById_ProductNotFound() {
-        Long productId = PRODUCT_ID_1;
+        UUID productId = PRODUCT_ID_1;
 
         when(productRepository.findById(productId)).thenReturn(Mono.empty());
 
@@ -61,7 +62,6 @@ class ProductServiceTest {
     void testCreateProduct() {
         when(productRepository.save(any(Product.class))).thenReturn(Mono.just(MOCK_PRODUCT_1));
 
-        // Act & Assert
         StepVerifier.create(productService.createProduct(CREATE_PRODUCT_DTO))
                 .expectNext(MOCK_PRODUCT_1)
                 .verifyComplete();
@@ -69,7 +69,7 @@ class ProductServiceTest {
 
     @Test
     void testUpdateProduct() {
-        Long productId = PRODUCT_ID_1;
+        UUID productId = PRODUCT_ID_1;
 
         when(productRepository.findById(productId)).thenReturn(Mono.just(MOCK_PRODUCT_1));
         when(productRepository.save(MOCK_PRODUCT_1)).thenReturn(Mono.just(UPDATED_PRODUCT));
@@ -81,7 +81,7 @@ class ProductServiceTest {
 
     @Test
     void testUpdateProduct_ProductNotFound() {
-        Long productId = PRODUCT_ID_1;
+        UUID productId = PRODUCT_ID_1;
 
         when(productRepository.findById(productId)).thenReturn(Mono.empty());
 
@@ -90,4 +90,3 @@ class ProductServiceTest {
                 .verify();
     }
 }
-

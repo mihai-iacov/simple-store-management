@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -27,7 +28,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Mono<Product> getProductById(Long id) {
+    public Mono<Product> getProductById(UUID id) {
         return productRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ProductNotFoundException(id)))
                 .doOnSuccess(product -> logger.info("Retrieved product: {}.", product))
@@ -36,18 +37,20 @@ public class ProductService {
 
     public Mono<Product> createProduct(CreateProductDto createProductDto) {
         Product product = Product.builder()
+                .id(UUID.randomUUID())
                 .name(createProductDto.name())
                 .description(createProductDto.description())
                 .price(createProductDto.price())
                 .stock(createProductDto.stock())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .newEntity(true)
                 .build();
         return productRepository.save(product)
                 .doOnSuccess(savedProduct -> logger.info("Created product: {}.", savedProduct));
     }
 
-    public Mono<Product> updateProduct(Long id, UpdateProductDto updateProductDto) {
+    public Mono<Product> updateProduct(UUID id, UpdateProductDto updateProductDto) {
         return productRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ProductNotFoundException(id)))
                 .flatMap(existingProduct -> {
@@ -61,7 +64,7 @@ public class ProductService {
                 .doOnSuccess(savedProduct -> logger.info("Updated product: {}.", savedProduct));
     }
 
-    public Mono<Void> deleteProduct(Long id) {
+    public Mono<Void> deleteProduct(UUID id) {
         return productRepository.deleteById(id)
                 .doOnSuccess(unused -> logger.info("Deleted product with ID: {}.", id));
     }

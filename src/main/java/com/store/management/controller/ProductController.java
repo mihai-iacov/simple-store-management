@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -24,7 +26,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Product> getProductById(@PathVariable Long id) {
+    public Mono<Product> getProductById(@PathVariable UUID id) {
         return productService.getProductById(id);
     }
 
@@ -34,12 +36,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Mono<Product> updateProduct(@PathVariable Long id, @RequestBody UpdateProductDto updatedProduct) {
+    public Mono<Product> updateProduct(@PathVariable UUID id, @RequestBody UpdateProductDto updatedProduct) {
         return productService.updateProduct(id, updatedProduct);
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Void> deleteProduct(@PathVariable Long id) {
+    public Mono<Void> deleteProduct(@PathVariable UUID id) {
         return productService.deleteProduct(id);
     }
 }

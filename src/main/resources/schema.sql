@@ -1,5 +1,5 @@
 CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     created_at TIMESTAMP NOT NULL,

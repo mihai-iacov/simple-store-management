@@ -6,11 +6,12 @@ import com.store.management.model.UpdateProductDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class TestConstants {
-    public static final Long PRODUCT_ID_1 = 1L;
-    public static final Long PRODUCT_ID_2 = 2L;
-    public static final Long PRODUCT_ID_3 = 3L;
+    public static final UUID PRODUCT_ID_1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+    public static final UUID PRODUCT_ID_2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
+    public static final UUID PRODUCT_ID_3 = UUID.fromString("00000000-0000-0000-0000-000000000003");
 
     public static final Product MOCK_PRODUCT_1 = Product.builder()
             .id(PRODUCT_ID_1)
