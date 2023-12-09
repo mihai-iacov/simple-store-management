@@ -33,6 +33,7 @@ public class ProductService {
     }
 
     public Mono<Product> createProduct(Product product) {
+        product.setId(null);
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
         return productRepository.save(product)
