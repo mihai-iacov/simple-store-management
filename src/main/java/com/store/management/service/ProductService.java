@@ -51,14 +51,26 @@ public class ProductService {
         return productRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ProductNotFoundException(id)))
                 .flatMap(existingProduct -> {
-                    existingProduct.setName(updateProductDto.name());
-                    existingProduct.setDescription(updateProductDto.description());
-                    existingProduct.setPrice(updateProductDto.price());
-                    existingProduct.setStock(updateProductDto.stock());
-                    existingProduct.setUpdatedAt(LocalDateTime.now());
+                    updateFields(updateProductDto, existingProduct);
                     return productRepository.save(existingProduct);
                 })
                 .doOnSuccess(savedProduct -> logger.info("Updated product: {}.", savedProduct));
+    }
+
+    private static void updateFields(UpdateProductDto updateProductDto, Product existingProduct) {
+        if (updateProductDto.name() != null) {
+            existingProduct.setName(updateProductDto.name());
+        }
+        if (updateProductDto.description() != null) {
+            existingProduct.setDescription(updateProductDto.description());
+        }
+        if (updateProductDto.price() != null) {
+            existingProduct.setPrice(updateProductDto.price());
+        }
+        if (updateProductDto.stock() != null) {
+            existingProduct.setStock(updateProductDto.stock());
+        }
+        existingProduct.setUpdatedAt(LocalDateTime.now());
     }
 
     public Mono<Void> deleteProduct(UUID id) {
