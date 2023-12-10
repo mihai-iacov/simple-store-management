@@ -35,3 +35,9 @@ There are three users available for authentication:
 - admin:admin - has access to all endpoints (CRUD + special updates)
 - commercial:commercial - has access to read endpoints, as well as updating the price
 - warehouse:warehouse - has access to read endpoints, as well as updating the stock
+
+## Testing
+The project contains unit tests for the service layer logic, as well as integration tests for the controller layer. The tests can be run with the following command:
+```bash
+mvn test
+```
